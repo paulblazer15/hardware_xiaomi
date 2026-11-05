@@ -21,6 +21,12 @@ cc_library_headers {
 
 cc_library_static {
     name: "libudfps_extension.xiaomi",
+    // Only build the SurfaceFlinger extension on devices that select it.
+    // Side-mounted fingerprint devices do not provide its QTI display headers.
+    enabled: select(soong_config_variable("aospaGlobalVars", "target_surfaceflinger_udfps_lib"), {
+        "libudfps_extension.xiaomi": true,
+        default: false,
+    }),
     srcs: ["UdfpsExtension.cpp"],
     include_dirs: [
         "frameworks/native/services/surfaceflinger/CompositionEngine/include",
